@@ -38,7 +38,7 @@ h1, h2, h3 { font-family: 'Montserrat', sans-serif; font-weight: 700; color: var
 .hero { height: 90vh; margin-top: 70px; background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.5)), url('https://praticotijolos.com.br/wp-content/uploads/2024/02/pratico_tijolos_ecologicos_banner.jpg') center/cover; display: flex; align-items: center; color: white; position: relative; }
 .hero-content { position: relative; z-index: 2; max-width: 700px; }
 .badge { background: var(--primary); padding: 5px 10px; border-radius: 4px; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; }
-.hero h1 { font-size: 2.5rem; margin: 15px 0 20px; }
+.hero h1 { font-size: 2.5rem; margin: 15px 0 20px; color: var(--white)}
 .btn { padding: 12px 25px; border-radius: 50px; font-weight: 700; text-transform: uppercase; cursor: pointer; border: none; text-decoration: none; display: inline-block; transition: 0.3s; }
 .btn-primary { background: var(--primary); color: white; }
 .btn-primary:hover { transform: translateY(-3px); background: var(--primary-dark); }
