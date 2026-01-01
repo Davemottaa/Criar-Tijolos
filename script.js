@@ -1,5 +1,5 @@
 // --- CONFIGURAÇÕES DE NEGÓCIO ---
-const PHONE_NUMBER = "5537998125238"; 
+const PHONE_NUMBER = "5537998125237"; 
 const PRECO_UNITARIO = 2.00;
 const TIJOLOS_POR_M2 = 64; // Altura 6.25cm exige mais tijolos
 const MARGEM_SEGURANCA = 1.15; // 15%

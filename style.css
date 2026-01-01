@@ -34,13 +34,41 @@ h1, h2, h3 { font-family: 'Montserrat', sans-serif; font-weight: 700; color: var
 .hamburger { display: none; cursor: pointer; }
 .bar { display: block; width: 25px; height: 3px; background: var(--text); margin: 5px 0; }
 
+/* Container da logo dentro da navbar */
+.logo {
+    display: flex;
+    align-items: center; /* Centraliza a logo verticalmente na barra */
+    padding: 5px 0;
+}
+
+/* A imagem da logo propriamente dita */
+.header img {
+    height: 60px;       /* Define uma altura fixa para não quebrar a barra */
+    width: auto;        /* Ajusta a largura automaticamente para não distorcer */
+    max-width: 200px;   /* Limite máximo de largura */
+    display: block;
+    transition: transform 0.2s ease;
+}
+
+/* Efeito sutil ao passar o mouse */
+.logo img:hover {
+    transform: scale(1.05);
+}
+
+/* Ajuste para telas pequenas (Mobile) */
+@media (max-width: 768px) {
+    .logo img {
+        height: 45px;   /* Logo um pouco menor no celular */
+    }
+}
+
 /* --- HERO --- */
 .hero { height: 90vh; margin-top: 70px; background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.5)), url('https://praticotijolos.com.br/wp-content/uploads/2024/02/pratico_tijolos_ecologicos_banner.jpg') center/cover; display: flex; align-items: center; color: white; position: relative; }
 .hero-content { position: relative; z-index: 2; max-width: 700px; }
 .badge { background: var(--primary); padding: 5px 10px; border-radius: 4px; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; }
 .hero h1 { font-size: 2.5rem; margin: 15px 0 20px; color: var(--white)}
 .btn { padding: 12px 25px; border-radius: 50px; font-weight: 700; text-transform: uppercase; cursor: pointer; border: none; text-decoration: none; display: inline-block; transition: 0.3s; }
-.btn-primary { background: var(--primary); color: white; }
+.btn-primary { background: var(--primary); color: white; padding: 10px; margin: 5px;}
 .btn-primary:hover { transform: translateY(-3px); background: var(--primary-dark); }
 .btn-whatsapp { background: #25D366; color: white; font-size: 1.1rem; padding: 15px; }
 .btn-whatsapp:hover { background: #1ebc57; }
