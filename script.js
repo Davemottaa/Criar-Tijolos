@@ -125,3 +125,25 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     document.querySelectorAll('.scroll-reveal').forEach(el => observer.observe(el));
 });
+
+// --- MAPS --- // 
+// Configurações do seu local
+const local = {
+    nome: "Criar Tijolos Ecolojicos",
+    endereco: "Rua Severo Veloso - 2147"
+};
+
+// Seleciona o botão pelo ID
+const botao = document.getElementById('botaoRota');
+
+// Adiciona a função de clique
+botao.addEventListener('click', () => {
+    // Monta a query de busca (Nome + Endereço)
+    const busca = encodeURIComponent(`${local.nome} ${local.endereco}`);
+    
+    // URL universal do Google Maps para rotas
+    const url = `https://www.google.com/maps/dir/?api=1&destination=${busca}`;
+    
+    // Abre em uma nova aba/janela
+    window.open(url, '_blank');
+});
