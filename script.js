@@ -1,8 +1,17 @@
+window.dataLayer = window.dataLayer || [];
+
 // --- CONFIGURAÇÕES DE NEGÓCIO ---
 const PHONE_NUMBER = "5537998125237"; 
 const PRECO_UNITARIO = 2.00;
 const TIJOLOS_POR_M2 = 64; // Altura 6.25cm exige mais tijolos
 const MARGEM_SEGURANCA = 1.05; // 5%
+
+function pushGtmEvent(eventName, payload = {}) {
+    window.dataLayer.push({
+        event: eventName,
+        ...payload
+    });
+}
 
 // Variáveis de Estado
 let state = {
@@ -71,6 +80,14 @@ function updateInterface(custoPadrao, custoCanaleta, subtotal) {
 
 // --- ENVIO WHATSAPP ---
 function sendBudgetToWhatsapp() {
+    pushGtmEvent('whatsapp_order_click', {
+        form_name: 'orcamento',
+        area: state.area,
+        qtd_padrao: state.qtdPadrao,
+        qtd_canaleta: state.qtdCanaleta,
+        total_geral: state.totalGeral
+    });
+
     if (state.totalGeral === 0) {
         alert("Por favor, preencha a área da parede para gerar o orçamento.");
         document.getElementById('wall-area').focus();
@@ -108,6 +125,32 @@ document.addEventListener('DOMContentLoaded', () => {
         hamburger.classList.remove("active");
         navMenu.classList.remove("active");
     }));
+
+    const wallAreaInput = document.getElementById('wall-area');
+    if (wallAreaInput) {
+        wallAreaInput.addEventListener('input', () => {
+            const value = wallAreaInput.value.trim();
+            pushGtmEvent('form_field_interaction', {
+                form_name: 'orcamento',
+                field_id: 'wall-area',
+                field_value: value,
+                field_type: 'number'
+            });
+        });
+    }
+
+    const fecharPedidoBtn = document.getElementById('btn-fechar-pedido');
+    if (fecharPedidoBtn) {
+        fecharPedidoBtn.addEventListener('click', () => {
+            pushGtmEvent('whatsapp_order_click', {
+                form_name: 'orcamento',
+                area: state.area,
+                qtd_padrao: state.qtdPadrao,
+                qtd_canaleta: state.qtdCanaleta,
+                total_geral: state.totalGeral
+            });
+        });
+    }
 
     // FAQ
     document.querySelectorAll(".faq-question").forEach(q => {
