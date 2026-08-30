@@ -51,7 +51,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <div class="container hero-content scroll-reveal">
             <span class="badge">Fábrica em Piumhi-MG</span>
             <h1>Sua Obra Pronta em <span class="text-green">Segundos</span></h1>
-            <p>Tijolos modulares (25x12,5x6,25). Simule o valor total da sua construção agora mesmo, incluindo materiais e frete.</p>
+            <p>Tijolos modulares (25x12,5x6,25). Simule o valor total da sua construção agora mesmo, incluindo materiais. O frete será consultado conforme a entrega.</p>
             <div class="hero-buttons">
                 <a href="#orcamento-integrado" class="btn btn-primary"><i class="fa-solid fa-calculator"></i> Simular Preço Total</a>
                 <a href="#educacional" class="btn btn-primary">Quero Aprender a Construir</a>
@@ -152,14 +152,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                     </div>
 
                     <div class="input-group">
-                        <label><i class="fa-solid fa-truck"></i> Região de Entrega</label>
-                        <select id="region-select" onchange="calculateTotalBudget()">
-                            <option value="0">Retirar na Fábrica / A Combinar</option>
-                            <option value="200">Piumhi - MG (R$ 200,00)</option>
-                            <option value="500">Capitólio (R$ 500,00)</option>
-                            <option value="1000">Passos (R$ 1.000,00)</option>
-                        </select>
-                        <p class="freight-disclaimer">* O valor do frete exibido é uma referência baseada em cargas padrão. O valor exato pode variar dependendo da dificuldade de acesso ou quantidade excedente.</p>
+                        <p class="freight-disclaimer">* Frete: será consultado ao fechar o pedido.</p>
                     </div>
                 </div>
 
@@ -194,9 +187,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                         </div>
 
                         <div class="invoice-row freight-row">
-                            <span>Frete Estimado</span>
+                            <span>Frete</span>
                             <span></span>
-                            <span id="display-freight">R$ 0,00</span>
+                            <span id="display-freight">Consultar ao fechar</span>
                         </div>
 
                         <div class="invoice-total">
@@ -221,7 +214,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 <h2>Dúvidas Frequentes</h2>
             </div>
             <div class="faq-container scroll-reveal">
-                <div class="faq-item"><button class="faq-question">1. O valor do frete é fixo? <i class="fa-solid fa-chevron-down"></i></button><div class="faq-answer"><p>Os valores do site são referências para entregas padrão nas cidades citadas. Locais de difícil acesso ou zona rural podem ter pequeno ajuste.</p></div></div>
+                <div class="faq-item"><button class="faq-question">1. Como funciona o frete? <i class="fa-solid fa-chevron-down"></i></button><div class="faq-answer"><p>O frete não é calculado automaticamente no site. Ele deve ser consultado conforme a região, o tipo de acesso e a quantidade solicitada, porque pode variar bastante.</p></div></div>
                 <div class="faq-item"><button class="faq-question">2. Por que a calculadora adiciona 5%? <i class="fa-solid fa-chevron-down"></i></button><div class="faq-answer"><p>Essa é a "Margem de Segurança Técnica". Ela cobre quebras no transporte, recortes na obra e garante que não falte material no meio da construção.</p></div></div>
                 <div class="faq-item"><button class="faq-question">3. Como funciona a quantidade de Canaletas? <i class="fa-solid fa-chevron-down"></i></button><div class="faq-answer"><p>O sistema calcula automaticamente 3 fiadas de canaleta para cada parede (base, meio e topo) para garantir a amarração estrutural correta.</p></div></div>
                 <div class="faq-item"><button class="faq-question">4. Medidas do tijolo? <i class="fa-solid fa-chevron-down"></i></button><div class="faq-answer"><p>25cm (Comprimento) x 12,5cm (Largura) x 6,25cm (Altura).</p></div></div>

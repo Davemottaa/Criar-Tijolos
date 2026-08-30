@@ -10,7 +10,7 @@ let state = {
     qtdPadrao: 0,
     qtdCanaleta: 0,
     valorFrete: 0,
-    nomeCidade: "A Combinar",
+    nomeCidade: "Consultar frete",
     totalGeral: 0
 };
 
@@ -18,7 +18,6 @@ let state = {
 function calculateTotalBudget() {
     // 1. Captura Inputs
     const areaInput = document.getElementById('wall-area');
-    const regionSelect = document.getElementById('region-select');
     
     let area = parseFloat(areaInput.value);
     
@@ -41,12 +40,12 @@ function calculateTotalBudget() {
     let custoCanaleta = state.qtdCanaleta * PRECO_UNITARIO;
     let subtotalMateriais = custoPadrao + custoCanaleta;
 
-    // 4. Calcula Frete
-    state.valorFrete = parseFloat(regionSelect.value);
-    state.nomeCidade = regionSelect.options[regionSelect.selectedIndex].text;
+    // 4. Frete consultado separadamente, sem cálculo automático
+    state.valorFrete = 0;
+    state.nomeCidade = 'Consultar ao fechar o pedido';
 
-    // 5. Total Final
-    state.totalGeral = subtotalMateriais + state.valorFrete;
+    // 5. Total Final (sem incluir frete automático)
+    state.totalGeral = subtotalMateriais;
 
     // 6. Atualiza a Tela (UI)
     updateInterface(custoPadrao, custoCanaleta, subtotalMateriais);
@@ -64,7 +63,7 @@ function updateInterface(custoPadrao, custoCanaleta, subtotal) {
     document.getElementById('display-val-canaleta').innerText = fmtMoney(custoCanaleta);
 
     document.getElementById('display-subtotal').innerText = fmtMoney(subtotal);
-    document.getElementById('display-freight').innerText = fmtMoney(state.valorFrete);
+    document.getElementById('display-freight').innerText = 'Consultar ao fechar';
     
     // Totalzão em destaque
     document.getElementById('display-grand-total').innerText = fmtMoney(state.totalGeral);
@@ -87,11 +86,11 @@ function sendBudgetToWhatsapp() {
     msg += `📏 Área: ${state.area}m²%0A`;
     msg += `🧱 Tijolos Padrão: ${state.qtdPadrao} un%0A`;
     msg += `🏗️ Canaletas: ${state.qtdCanaleta} un%0A`;
-    msg += `📍 Frete: ${state.nomeCidade}%0A`;
+    msg += `📍 Frete: será consultado ao fechar o pedido.%0A`;
     msg += `--------------------------------%0A`;
     msg += `💰 *VALOR TOTAL: R$ ${fmtMoney(state.totalGeral)}*%0A`;
     msg += `--------------------------------%0A%0A`;
-    msg += `*Observação:* Estou ciente que o frete é uma referência. Gostaria de validar o pedido e combinar o pagamento.`;
+    msg += `*Observação:* O valor do frete será consultado ao fechar o pedido e após avaliação do local. Gostaria de validar o pedido e combinar o pagamento.`;
 
     window.open(`https://wa.me/${PHONE_NUMBER}?text=${msg}`, '_blank');
 }
