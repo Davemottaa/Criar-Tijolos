@@ -1,25 +1,15 @@
-window.dataLayer = window.dataLayer || [];
-
 // --- CONFIGURAÇÕES DE NEGÓCIO ---
 const PHONE_NUMBER = "5537998125237"; 
-const PRECO_UNITARIO = 2.00;
+const PRECO_UNITARIO = 1.75;
 const TIJOLOS_POR_M2 = 64; // Altura 6.25cm exige mais tijolos
 const MARGEM_SEGURANCA = 1.05; // 5%
-
-function pushGtmEvent(eventName, payload = {}) {
-    window.dataLayer.push({
-        event: eventName,
-        ...payload
-    });
-}
 
 // Variáveis de Estado
 let state = {
     area: 0,
     qtdPadrao: 0,
     qtdCanaleta: 0,
-    valorFrete: 0,
-    nomeCidade: "Consultar frete",
+    freteInfo: "A consultar",
     totalGeral: 0
 };
 
@@ -39,7 +29,7 @@ function calculateTotalBudget() {
     let brutoCanaleta = Math.ceil(totalBruto * 0.09); 
     let brutoPadrao = totalBruto - brutoCanaleta;
 
-    // Aplica Margem 15%
+    // Aplica margem de segurança de 5%
     state.qtdPadrao = Math.ceil(brutoPadrao * MARGEM_SEGURANCA);
     state.qtdCanaleta = Math.ceil(brutoCanaleta * MARGEM_SEGURANCA);
     state.area = area;
@@ -49,15 +39,42 @@ function calculateTotalBudget() {
     let custoCanaleta = state.qtdCanaleta * PRECO_UNITARIO;
     let subtotalMateriais = custoPadrao + custoCanaleta;
 
-    // 4. Frete consultado separadamente, sem cálculo automático
-    state.valorFrete = 0;
-    state.nomeCidade = 'Consultar ao fechar o pedido';
-
-    // 5. Total Final (sem incluir frete automático)
+    // 4. Total Final
     state.totalGeral = subtotalMateriais;
 
-    // 6. Atualiza a Tela (UI)
+    // 5. Atualiza a Tela (UI)
     updateInterface(custoPadrao, custoCanaleta, subtotalMateriais);
+}
+
+// --- ÁREA DE ALVENARIA GUIADA ---
+// Tijolos são calculados pela superfície das paredes, não pela área do piso.
+function calculateWallArea() {
+    const readValue = (id) => {
+        const value = parseFloat(document.getElementById(id).value);
+        return Number.isFinite(value) && value > 0 ? value : 0;
+    };
+    const perimeter = readValue('external-perimeter');
+    const height = readValue('ceiling-height');
+    const internalWalls = readValue('internal-walls');
+    const openings = readValue('openings-area');
+
+    const externalArea = perimeter * height;
+    const internalArea = internalWalls * height;
+    const netArea = Math.max(0, externalArea + internalArea - openings);
+    const fmtArea = (value) => `${value.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} m²`;
+
+    document.getElementById('display-external-area').innerText = fmtArea(externalArea);
+    document.getElementById('display-internal-area').innerText = fmtArea(internalArea);
+    document.getElementById('display-openings-area').innerText = fmtArea(openings);
+    document.getElementById('display-calculated-area').innerText = fmtArea(netArea);
+
+    // Só substitui o campo final quando há medidas suficientes para uma parede.
+    // Assim, quem já possui a área no projeto ainda pode preenchê-la diretamente.
+    if (height > 0 && (perimeter > 0 || internalWalls > 0)) {
+        const areaInput = document.getElementById('wall-area');
+        areaInput.value = netArea.toFixed(2);
+        calculateTotalBudget();
+    }
 }
 
 // --- ATUALIZAÇÃO VISUAL (DOM) ---
@@ -72,7 +89,7 @@ function updateInterface(custoPadrao, custoCanaleta, subtotal) {
     document.getElementById('display-val-canaleta').innerText = fmtMoney(custoCanaleta);
 
     document.getElementById('display-subtotal').innerText = fmtMoney(subtotal);
-    document.getElementById('display-freight').innerText = 'Consultar ao fechar';
+    document.getElementById('display-freight').innerText = state.freteInfo;
     
     // Totalzão em destaque
     document.getElementById('display-grand-total').innerText = fmtMoney(state.totalGeral);
@@ -80,14 +97,6 @@ function updateInterface(custoPadrao, custoCanaleta, subtotal) {
 
 // --- ENVIO WHATSAPP ---
 function sendBudgetToWhatsapp() {
-    pushGtmEvent('whatsapp_order_click', {
-        form_name: 'orcamento',
-        area: state.area,
-        qtd_padrao: state.qtdPadrao,
-        qtd_canaleta: state.qtdCanaleta,
-        total_geral: state.totalGeral
-    });
-
     if (state.totalGeral === 0) {
         alert("Por favor, preencha a área da parede para gerar o orçamento.");
         document.getElementById('wall-area').focus();
@@ -103,11 +112,11 @@ function sendBudgetToWhatsapp() {
     msg += `📏 Área: ${state.area}m²%0A`;
     msg += `🧱 Tijolos Padrão: ${state.qtdPadrao} un%0A`;
     msg += `🏗️ Canaletas: ${state.qtdCanaleta} un%0A`;
-    msg += `📍 Frete: será consultado ao fechar o pedido.%0A`;
+    msg += `📍 Frete: a consultar%0A`;
     msg += `--------------------------------%0A`;
     msg += `💰 *VALOR TOTAL: R$ ${fmtMoney(state.totalGeral)}*%0A`;
     msg += `--------------------------------%0A%0A`;
-    msg += `*Observação:* O valor do frete será consultado ao fechar o pedido e após avaliação do local. Gostaria de validar o pedido e combinar o pagamento.`;
+    msg += `*Observação:* Estou ciente que o frete deve ser consultado separadamente, pois pode variar conforme distância, acesso ao local, quantidade e outros fatores. Gostaria de validar o pedido e combinar o pagamento.`;
 
     window.open(`https://wa.me/${PHONE_NUMBER}?text=${msg}`, '_blank');
 }
@@ -125,32 +134,6 @@ document.addEventListener('DOMContentLoaded', () => {
         hamburger.classList.remove("active");
         navMenu.classList.remove("active");
     }));
-
-    const wallAreaInput = document.getElementById('wall-area');
-    if (wallAreaInput) {
-        wallAreaInput.addEventListener('input', () => {
-            const value = wallAreaInput.value.trim();
-            pushGtmEvent('form_field_interaction', {
-                form_name: 'orcamento',
-                field_id: 'wall-area',
-                field_value: value,
-                field_type: 'number'
-            });
-        });
-    }
-
-    const fecharPedidoBtn = document.getElementById('btn-fechar-pedido');
-    if (fecharPedidoBtn) {
-        fecharPedidoBtn.addEventListener('click', () => {
-            pushGtmEvent('whatsapp_order_click', {
-                form_name: 'orcamento',
-                area: state.area,
-                qtd_padrao: state.qtdPadrao,
-                qtd_canaleta: state.qtdCanaleta,
-                total_geral: state.totalGeral
-            });
-        });
-    }
 
     // FAQ
     document.querySelectorAll(".faq-question").forEach(q => {
@@ -171,8 +154,8 @@ document.addEventListener('DOMContentLoaded', () => {
 // --- MAPS --- // 
 // Configurações do seu local
 const local = {
-    nome: "Criar Tijolos Ecolojicos",
-    endereco: "Rua Severo Veloso - 2147"
+    nome: "Criar Tijolos Ecológicos",
+    endereco: "Rua Severo Veloso, 2147 - Piumhi, MG"
 };
 
 // Seleciona o botão pelo ID
