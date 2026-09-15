@@ -7,6 +7,8 @@ const MARGEM_SEGURANCA = 1.05; // 5%
 // Variáveis de Estado
 let state = {
     area: 0,
+    totalBase: 0,
+    totalComMargem: 0,
     qtdPadrao: 0,
     qtdCanaleta: 0,
     freteInfo: "A consultar",
@@ -24,14 +26,14 @@ function calculateTotalBudget() {
     if (!area || area < 0) area = 0;
 
     // 2. Calcula Quantidades (Física)
-    // Regra: 9% Canaletas (aprox 3 fiadas em parede padrão)
-    let totalBruto = Math.ceil(area * TIJOLOS_POR_M2);
-    let brutoCanaleta = Math.ceil(totalBruto * 0.09); 
-    let brutoPadrao = totalBruto - brutoCanaleta;
-
-    // Aplica margem de segurança de 5%
-    state.qtdPadrao = Math.ceil(brutoPadrao * MARGEM_SEGURANCA);
-    state.qtdCanaleta = Math.ceil(brutoCanaleta * MARGEM_SEGURANCA);
+    // Primeiro aplica 5% de segurança no total de peças e, sobre esse total,
+    // reserva 10% para canaletas estruturais.
+    const totalBase = Math.ceil(area * TIJOLOS_POR_M2);
+    const totalComMargem = Math.ceil(totalBase * MARGEM_SEGURANCA);
+    state.totalBase = totalBase;
+    state.totalComMargem = totalComMargem;
+    state.qtdCanaleta = Math.ceil(totalComMargem * 0.10);
+    state.qtdPadrao = totalComMargem - state.qtdCanaleta;
     state.area = area;
 
     // 3. Calcula Valores (Financeiro)
@@ -93,6 +95,12 @@ function updateInterface(custoPadrao, custoCanaleta, subtotal) {
     
     // Totalzão em destaque
     document.getElementById('display-grand-total').innerText = fmtMoney(state.totalGeral);
+
+    const fmtNumber = (val) => val.toLocaleString('pt-BR');
+    document.getElementById('display-base-area').innerText = `${state.area.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} m²`;
+    document.getElementById('display-base-bricks').innerText = `${fmtNumber(state.totalBase)} peças`;
+    document.getElementById('display-bricks-margin').innerText = `${fmtNumber(state.totalComMargem)} peças`;
+    document.getElementById('display-bricks-distribution').innerText = `${fmtNumber(state.qtdPadrao)} + ${fmtNumber(state.qtdCanaleta)} peças`;
 }
 
 // --- ENVIO WHATSAPP ---

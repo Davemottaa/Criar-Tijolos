@@ -279,6 +279,13 @@
                         </div>
                     </div>
 
+                    <div class="brick-calculation" aria-live="polite">
+                        <p><i class="fa-solid fa-circle-info"></i> Como calculamos as peças</p>
+                        <div><span><b id="display-base-area">0,00 m²</b> × 64 peças/m²</span><strong id="display-base-bricks">0 peças</strong></div>
+                        <div><span>Margem de segurança de 5%</span><strong id="display-bricks-margin">0 peças</strong></div>
+                        <div><span>Distribuição: 90% normal + 10% canaleta</span><strong id="display-bricks-distribution">0 + 0 peças</strong></div>
+                    </div>
+
                     <button id="btn-fechar-pedido" class="btn btn-whatsapp full-width" onclick="sendBudgetToWhatsapp()">
                         <i class="fa-brands fa-whatsapp"></i> Fechar Pedido no WhatsApp
                     </button>
@@ -313,8 +320,8 @@
                 <div class="faq-item"><button class="faq-question">3. Como funciona a quantidade de Canaletas? <i
                             class="fa-solid fa-chevron-down"></i></button>
                     <div class="faq-answer">
-                        <p>O sistema calcula automaticamente 3 fiadas de canaleta para cada parede (base, meio e topo)
-                            para garantir a amarração estrutural correta.</p>
+                        <p>Após incluir a margem de segurança, o simulador reserva 10% das peças para canaletas
+                            estruturais. A definição final deve ser validada conforme o projeto da obra.</p>
                     </div>
                 </div>
                 <div class="faq-item"><button class="faq-question">4. Medidas do tijolo? <i

@@ -606,6 +606,35 @@ h3 {
     border-top: 2px dashed #ccc;
 }
 
+.brick-calculation {
+    margin: 0 0 20px;
+    padding: 14px 16px;
+    border-radius: 8px;
+    background: #f7fbf7;
+    border: 1px solid #d7e8d8;
+}
+
+.brick-calculation > p {
+    color: var(--primary-dark);
+    font-weight: 700;
+    font-size: .82rem;
+    margin-bottom: 7px;
+}
+
+.brick-calculation > p i { margin-right: 4px; }
+
+.brick-calculation div {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    padding: 5px 0;
+    color: #5b665d;
+    font-size: .76rem;
+    border-top: 1px solid #e1ece2;
+}
+
+.brick-calculation div strong { color: var(--secondary); white-space: nowrap; }
+
 .security-note {
     font-size: 0.8rem;
     text-align: center;
